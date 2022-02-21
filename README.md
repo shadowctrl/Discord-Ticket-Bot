@@ -1,6 +1,6 @@
 A Ticket Bot system specifically made for elitex-city although you can customize it.
 
-######################        Features          ########################
+###############        Features          ################
 
 1) Ticket arranged by issue category
 2) Closed tickets made available for review
@@ -12,7 +12,7 @@ A Ticket Bot system specifically made for elitex-city although you can customize
 8) Seperated much as possible for easy understanding
 9) Error-Free
 
-####################       Usage         ####################
+###########       Usage         ############
 
 1) Required Node v16 and above and npm v8 and above
 2) mongodb (selfhosted/atlas)
