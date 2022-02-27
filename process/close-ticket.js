@@ -21,7 +21,7 @@ module.exports={
                         {name: "Ticket Status", value:`${data.ticket_status}`, inline:true},
                         {name: "Closed By", value: `${interaction.member}`, inline:true},
                     )
-                    .setFooter({text:'EliteX Support', iconURL:'https://cdn.discordapp.com/attachments/782584284321939468/784745798789234698/2-Transparent.png'})
+                    .setFooter({text:'EliteX Support', iconURL:process.env.eliteximage})
                     .setTimestamp();
 
                 const verify_row = new MessageActionRow()
@@ -100,7 +100,7 @@ module.exports={
                             {name: "Ticket Status", value:`${data.ticket_status}`, inline:true},
                             {name: "Closed By", value: `${i.member}`, inline:true},
                         )
-                        .setFooter({text:'EliteX Support', iconURL:'https://cdn.discordapp.com/attachments/782584284321939468/784745798789234698/2-Transparent.png'})
+                        .setFooter({text:'EliteX Support', iconURL:process.env.eliteximage})
                         .setTimestamp();
                     
                         await interaction.editReply({ embeds: [close_embed], components:[] });

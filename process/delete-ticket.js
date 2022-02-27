@@ -51,6 +51,7 @@ module.exports={
                                     .setTimestamp();
 
                         await interaction.channel.bulkDelete(1)
+                        await channel.send({content:`Hold on deleting ticket. You can check logs at <#${process.env.closed_ticket_logs}>`,embeds:[closed]},)
                         setTimeout(async () => {
                             await ticket_channel_logs.send({embeds:[closed]});
                             await channel.delete();

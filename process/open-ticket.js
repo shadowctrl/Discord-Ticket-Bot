@@ -179,8 +179,13 @@ module.exports={
                         newdata.ticket_status="Reviewing";
                         const embed = new MessageEmbed()
                                     .setColor('RANDOM')
-                                    .setDescription(`<@${user_id}> Created a ticket ${i.values[0]}`)
-                                    .setFooter({text:'EliteX Support', iconURL:'https://cdn.discordapp.com/attachments/782584284321939468/784745798789234698/2-Transparent.png'})
+                                    .setDescription(`<@${user_id}> Your ticket has been creted. kindly standby for our support team.`)
+                                    .addFields(
+                                    {name:"Ticket no", value:`${newdata.user_ticket_no}`, inline:true},
+                                    {name:"Status", value:`${newdata.ticket_status}`,inline:true},
+                                    {name:"Category", value:`${i.values[0]}`,inline:true},)
+                                    .setThumbnail(process.env.eliteximage)
+                                    .setFooter({text:'EliteX Support', iconURL:process.env.eliteximage})
                                     .setTimestamp();
 
                                 const row = new MessageActionRow()
@@ -194,7 +199,7 @@ module.exports={
                                     );
                                
                                     await ticket_channel.send({
-                                        content: `Your Ticket Has Been Created!`,
+                                        content: `<@${process.env.ticket_support_role_id}>`,
                                         embeds: [embed],
                                         components: [row]
                                     }).then(async msg=> { newdata.close_ticket_id=msg.id; await newdata.save()} );
@@ -252,7 +257,7 @@ module.exports={
                         .setTitle("Identity Verifier")
                         .setDescription("I have been noticed that you are not allowed to select options. Only ticket owners can...")
                         .setTimestamp()
-                        .setFooter({text:'EliteX Support', iconURL:'https://cdn.discordapp.com/attachments/782584284321939468/784745798789234698/2-Transparent.png'})
+                        .setFooter({text:'EliteX Support', iconURL:process.env.eliteximage})
                     
                         await interaction.reply({embeds : [embed]});
                 }
