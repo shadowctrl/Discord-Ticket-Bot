@@ -6,6 +6,7 @@ const details = new Schema({
     ticket_channel_id: String,
     user_ticket_no: Number,
     ticket_status: String,
+    close_ticket_id: String,
 })
 
 module.exports = model('Ticket-Details', details);

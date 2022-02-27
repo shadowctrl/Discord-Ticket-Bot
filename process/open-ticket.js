@@ -1,4 +1,4 @@
-const { MessageEmbed,Permissions, MessageActionRow, MessageSelectMenu, MessageButton } = require("discord.js");
+const { MessageEmbed,Permissions, MessageActionRow, MessageSelectMenu, MessageButton, Collection } = require("discord.js");
 
 const db = require('C:/Users/R_a_g/OneDrive/Documents/code/js/discordjs/elitex-support/mongodb/schema');
 const ticket_no=require('C:/Users/R_a_g/OneDrive/Documents/code/js/discordjs/elitex-support/mongodb/ticket_no');
@@ -7,9 +7,10 @@ require('dotenv');
 
 module.exports={
     name: "open-ticket",
-
+    
     async execute(client,interaction)
     {   
+        client.row=new Collection()
         var user_name = interaction.user.username;
         var guild_id = interaction.guildId;
         var user_id = interaction.user.id;
@@ -93,7 +94,8 @@ module.exports={
                     user_id:user_id,
                     ticket_channel_id: ticket_channel_id ,
                     user_ticket_no: user_ticket_no,
-                    ticket_status:`${ticket_status}`
+                    ticket_status:`${ticket_status}`,
+                    close_ticket_id:"null",
                 },);
                 await newdata.save();
                 
@@ -165,15 +167,15 @@ module.exports={
                 time: 60000
             });
            
-            collector.on('collect', i => 
+            collector.on('collect',async i => 
             {   
                 
                 if (i.user.id == user_id)
                 {
-                    if (category_message.deletable)
+                    if (await category_message.deletable)
                     {   
                         
-                        category_message.delete();
+                        await category_message.delete();
                         newdata.ticket_status="Reviewing";
                         const embed = new MessageEmbed()
                                     .setColor('RANDOM')
@@ -188,57 +190,59 @@ module.exports={
                                             .setLabel('Close ticket')
                                             .setEmoji('899745362137477181')
                                             .setStyle('DANGER'),
+                                            
                                     );
-
-                                    const opened = ticket_channel.send({
+                               
+                                    await ticket_channel.send({
                                         content: `Your Ticket Has Been Created!`,
                                         embeds: [embed],
                                         components: [row]
-                                    });
+                                    }).then(async msg=> { newdata.close_ticket_id=msg.id; await newdata.save()} );
+                                    //await newdata.save();
 
                                     if (i.values[0] == 'ooc') 
                                     {
-                                        ticket_channel.edit({
+                                        await ticket_channel.edit({
                                             parent: process.env.parentooc
                                         });
                                     }
                                     
                                     if (i.values[0] == 'bugs') 
                                     {
-                                        ticket_channel.edit({
+                                        await ticket_channel.edit({
                                             parent: process.env.parentbugs
                                         });
                                     }
                     
                                     if (i.values[0] == 'supporters') 
                                     {
-                                        ticket_channel.edit({
+                                        await ticket_channel.edit({
                                             parent: process.env.parentsupporters
                                         });
                                     }
                     
                                     if (i.values[0] == 'planned') 
                                     {
-                                        ticket_channel.edit({
+                                        await ticket_channel.edit({
                                             parent: process.env.parentplanned
                                         });
                                     }
                     
                                     if (i.values[0] == 'character') 
                                     {
-                                        ticket_channel.edit({
+                                        await ticket_channel.edit({
                                             parent: process.env.parentcharacter
                                         })
                                     }
                     
                                     if (i.values[0] == 'others') 
                                     {
-                                        ticket_channel.edit({
+                                        await ticket_channel.edit({
                                             parent: process.env.parentothers
                                         });
                                     }
                                     
-                                    newdata.save();
+                                    await newdata.save();
                      
                     }
                 }
@@ -250,7 +254,7 @@ module.exports={
                         .setTimestamp()
                         .setFooter({text:'EliteX Support', iconURL:'https://cdn.discordapp.com/attachments/782584284321939468/784745798789234698/2-Transparent.png'})
                     
-                    interaction.reply({embeds : [embed]});
+                        await interaction.reply({embeds : [embed]});
                 }
 
             });     // Collector Close   

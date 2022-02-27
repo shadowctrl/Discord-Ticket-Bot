@@ -34,11 +34,9 @@ module.exports={
                     );
                         
                 await interaction.editReply({embeds:[verify_embed], components:[verify_row]});
-                
                     
             }
         
-         
     },
 
     async execute(client,interaction)
@@ -48,7 +46,6 @@ module.exports={
         const data = await db.findOne({ ticket_channel_id: interaction.channelId});
         if(data)
         {   
-
             const confirm_embed = new MessageEmbed()
                 .setColor('RED')
                 .setTitle(`confirm closure. Ticket-#${data.user_ticket_no}`)
@@ -68,6 +65,19 @@ module.exports={
                         .setStyle('SECONDARY'),
                 );
             
+                const row = new MessageActionRow()
+                                    .addComponents(
+                                        new MessageButton()
+                                            .setCustomId('close-ticket')
+                                            .setLabel('Close ticket')
+                                            .setEmoji('899745362137477181')
+                                            .setStyle('DANGER')
+                                            .setDisabled(true),
+                                    )
+            var dis_msg;
+            await client.channels.cache.get(interaction.channelId).messages.fetch(data.close_ticket_id).then(async msg => {
+                dis_msg=await msg.edit({components:[row]});
+            })    
             await interaction.reply({embeds:[confirm_embed], components:[confirm_row]});
 
             const collector = await interaction.channel.createMessageComponentCollector({
@@ -127,6 +137,8 @@ module.exports={
                 {   
                     let a= await interaction.editReply({ content: "Ticket Closure Cancelled.", embeds: [], components: [],ephemeral:true});
                     setTimeout(async () => await a.delete(), 3000);
+                    row.components[0].setDisabled(false)
+                    await dis_msg.edit({components:[row]})
                     await collector.stop();
                 }
             });
@@ -135,7 +147,10 @@ module.exports={
 
             collector.on('end', async (i) => {
                 if (i.size < 1) {
-                await interaction.followUp({content: "Ticket Closure Cancelled", ephemeral:true});
+                a=await interaction.editReply({content: "Ticket Closure Cancelled",components:[],embeds:[], ephemeral:true});
+                row.components[0].setDisabled(false)
+                await dis_msg.edit({components:[row]})
+                setTimeout(async () => await a.delete(),3000);    
             }
             })
 
