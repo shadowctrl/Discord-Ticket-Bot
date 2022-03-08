@@ -31,4 +31,4 @@
 ## Others
 ***Check out our discordbot*** 
 - https://cutt.ly/tonydiscordbot
-
+- ***```Specially made for EliteX Roleplay```***
