@@ -31,8 +31,3 @@
 - mongodb (selfhosted/atlas)
 
 - node index.js
-
-## Others
-***Check out our discordbot*** 
-- https://cutt.ly/tonydiscordbot
-- ***```Specially made for EliteX Roleplay```***
